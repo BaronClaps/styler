@@ -13,9 +13,14 @@
     "@nuxt/fonts": "^0.14.0",
     "@nuxt/icon": "^2.2.2",
     "@nuxt/ui": "^4.8.1",
+    "@supabase/supabase-js": "^2.106.2",
     "nuxt": "^4.4.6",
     "tailwindcss": "^4.3.0",
     "vue": "^3.5.34",
     "vue-router": "^5.0.7"
+  },
+  "devDependencies": {
+    "@iconify-json/heroicons": "^1.2.3",
+    "autoprefixer": "^10.4.14"
   }
 }

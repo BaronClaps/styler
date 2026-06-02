@@ -2,7 +2,7 @@
 
 Figuring out what to wear is always a hassle, and there are no free options to scan your wardrobe to stitch your wardrobe together.
 
-Pipeline:
+## Pipeline:
 1. scan wardrobe
     - parse and classify clothing
     - sort clothing by type and purpose
@@ -17,6 +17,7 @@ Pipeline:
     - learn the user's style over time and generate better outfits
     - show styles in a tinder format for swipe left or right and learn from discards
 
+## Research Dialogue:
 - first step is figure out vision classification. 
   - i need the cheapest (hopefully free) and fastest processing possible. 
   - taking photos feels very strenuous unless you can just press the button a bunch of times?? like instead of having to do the whole "use photo" dialogue
