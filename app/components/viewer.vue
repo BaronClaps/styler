@@ -71,25 +71,33 @@ onBeforeUnmount(() => { stopCamera() })
 </script>
 
 <template>
-  <div class="flex flex-col items-center justify-center p-4 w-full h-full">
-    <div class="relative aspect-video w-full bg-slate-950 rounded-xl overflow-hidden border border-slate-800 shadow-2xl flex items-center justify-center">
-      <video ref="videoRef" autoplay playsinline muted class="w-full h-full object-contain scale-x-[-1]"/>
-      <slot />
-      <div v-if="errorMessage" class="absolute inset-0 flex flex-col items-center justify-center p-6 text-center bg-slate-950/80 overflow-y-auto">
-        <UIcon name="i-heroicons-exclamation-triangle" class="w-12 h-12 text-rose-500 mb-2" />
-        <p class="text-sm font-medium text-slate-200 mb-4">{{ errorMessage }}</p>
+  <div class="absolute inset-0 w-full h-full bg-black overflow-hidden flex items-center justify-center">
 
-        <div class="flex flex-col items-center gap-4 w-full max-w-sm">
-          <button @click="startCamera" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 rounded-md text-sm font-semibold transition w-full max-w-[24rem]">
-            Retry Connection
-          </button>
-          <slot name="fallback-action" />
-        </div>
+    <video
+        ref="videoRef"
+        autoplay
+        playsinline
+        muted
+        class="absolute inset-0 w-full h-full object-cover scale-x-[-1]"
+    />
+
+    <slot />
+
+    <div v-if="errorMessage" class="absolute inset-0 flex flex-col items-center justify-center p-6 text-center bg-slate-950/90 z-20 overflow-y-auto">
+      <UIcon name="i-heroicons-exclamation-triangle" class="w-12 h-12 text-rose-500 mb-2" />
+      <p class="text-sm font-medium text-slate-200 mb-4">{{ errorMessage }}</p>
+
+      <div class="flex flex-col items-center gap-4 w-full max-w-sm">
+        <button @click="startCamera" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 rounded-md text-sm font-semibold text-white transition w-full max-w-[24rem]">
+          Retry Connection
+        </button>
+        <slot name="fallback-action" />
       </div>
-      <div v-if="!isStreaming && !errorMessage" class="absolute inset-0 bg-slate-950 flex flex-col items-center justify-center">
-        <UIcon name="i-heroicons-arrow-path" class="w-8 h-8 text-emerald-500 animate-spin mb-2" />
-        <p class="text-xs text-slate-400">Requesting video stream...</p>
-      </div>
+    </div>
+
+    <div v-if="!isStreaming && !errorMessage" class="absolute inset-0 bg-slate-950 flex flex-col items-center justify-center z-20">
+      <UIcon name="i-heroicons-arrow-path" class="w-8 h-8 text-emerald-500 animate-spin mb-2" />
+      <p class="text-xs text-slate-400">Requesting video stream...</p>
     </div>
   </div>
 </template>

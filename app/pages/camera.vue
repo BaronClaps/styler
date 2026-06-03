@@ -1,28 +1,51 @@
 <template>
-  <UMain class="h-full min-h-0 flex flex-col overflow-hidden">
+  <div class="w-full h-full flex flex-col relative overflow-hidden">
     <Viewer ref="viewerRef">
-      <UButton
-          icon="i-ic-outline-circle"
-          variant="ghost"
-          color="white"
-          class="absolute bottom-6 left-1/2 -translate-x-1/2 z-10 p-0 rounded-full hover:bg-transparent dark:hover:bg-transparent active:scale-95 transition-transform text-white drop-shadow-md [&_span]:!w-28 [&_span]:!h-28"
-          :class="{ 'opacity-50 pointer-events-none': isUploading }"
-          @click="handleCapture"
-      />
-
+      <div class="absolute bottom-10 left-0 right-0 flex items-center justify-between z-30 px-8 pointer-events-none">
+        <div class="flex items-center justify-center w-12 h-12 md:hidden pointer-events-auto">
+          <UButton
+              to="/wardrobe"
+              icon="i-lucide-shirt"
+              size="xl"
+              color="neutral"
+              variant="subtle"
+              class="rounded-full bg-slate-900/60 backdrop-blur-md border border-slate-700/50 text-white hover:bg-slate-800/80 active:scale-50 transition"
+              aria-label="Go to home"/>
+        </div>
+        <div class="hidden md:block w-12 h-12"></div>
+        <button
+            type="button"
+            class="group pointer-events-auto relative flex items-center justify-center w-20 h-20 bg-transparent border-4 border-white rounded-full transition-transform active:scale-90 focus:outline-none shadow-xl shrink-0"
+            :class="{ 'opacity-40 pointer-events-none': isUploading }"
+            @click="handleCapture">
+          <span class="w-16 h-16 bg-white rounded-full opacity-95 transition group-hover:scale-95" />
+        </button>
+        <div class="flex items-center justify-center w-12 h-12 md:hidden pointer-events-auto">
+          <UButton
+              to="/settings"
+              icon="i-heroicons-cog-6-tooth"
+              size="xl"
+              color="neutral"
+              variant="subtle"
+              class="rounded-full bg-slate-900/60 backdrop-blur-md border border-slate-700/50 text-white hover:bg-slate-800/80 active:scale-95 transition"
+              aria-label="Open settings"/>
+        </div>
+        <div class="hidden md:block w-12 h-12"></div>
+      </div>
       <template #fallback-action>
-        <UFileUpload
-            v-model="fileModel"
-            accept="image/*"
-            class="w-full max-w-[24rem]"
-            label="Upload image instead"
-            icon="i-lucide-image"
-            :disabled="isUploading"
-            @update:model-value="(files) => handleImageUpload(files)"
-        />
+        <div class="w-full max-w-[24rem] mt-2 px-4 pointer-events-auto">
+          <UFileUpload
+              v-model="fileModel"
+              accept="image/*"
+              class="w-full"
+              label="Upload image instead"
+              icon="i-lucide-image"
+              :disabled="isUploading"
+              @update:model-value="(files) => handleImageUpload(files)"/>
+        </div>
       </template>
     </Viewer>
-  </UMain>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -94,11 +117,14 @@ const handleImageUpload = async (payload: any): Promise<void> => {
 
   if (!file) return
 
+  if (userId.value == null) {
+    userId.value = crypto.randomUUID()
+  }
+
   try {
     isUploading.value = true
     analysisResult.value = null
     currentStatus.value = 'pending'
-
     const itemId: string = crypto.randomUUID()
     currentItemId.value = itemId
 
