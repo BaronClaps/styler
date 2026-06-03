@@ -34,10 +34,7 @@
           >
             <div
                 class="h-(--ui-header-height) shrink-0 flex items-center px-4"
-                :class="[
-          variant !== 'floating' && 'border-b border-default',
-          side === 'right' && 'justify-end'
-        ]"
+                :class="[variant !== 'floating' && 'border-b border-default', side === 'right' && 'justify-end']"
             >
               <UButton
                   :icon="side === 'left' ? 'i-lucide-panel-left' : 'i-lucide-panel-right'"
@@ -47,11 +44,9 @@
                   @click="open = !open"
               />
             </div>
-
             <div class="flex-1 p-4">
-
               <main>
-                <NuxtPage />
+                  <NuxtPage />
               </main>
             </div>
           </div>
@@ -64,7 +59,6 @@
 <script setup lang="ts">
 import type { NavigationMenuItem, SidebarProps } from '@nuxt/ui'
 
-// Ignore the props for the example
 defineProps<Pick<SidebarProps, 'variant' | 'collapsible' | 'side'>>()
 
 const open = ref(true)
