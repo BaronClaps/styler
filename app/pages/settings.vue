@@ -1,6 +1,14 @@
 <template>
   <UMain>
     <div class="flex-1 p-6 space-y-6 max-w-xl">
+        <UButton
+            icon="i-heroicons-arrow-left"
+            color="neutral"
+            variant="ghost"
+            label="Back"
+            class="text-slate-200 hover:text-white"
+            @click="$router.back()"
+        />
       <div class="p-5 bg-slate-900 border border-slate-800 rounded-xl shadow-xl space-y-4">
         <div class="flex flex-col gap-1.5">
           <label class="text-xs font-semibold uppercase tracking-wider text-slate-400">
