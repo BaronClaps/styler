@@ -2,6 +2,17 @@
   <div class="w-full h-full flex flex-col relative overflow-hidden">
     <Viewer ref="viewerRef">
 
+      <div class="absolute top-6 right-6 z-30 md:hidden">
+        <UButton
+            icon="i-heroicons-arrow-path-rounded-square"
+            color="neutral"
+            variant="subtle"
+            class="rounded-full h-12 w-12 flex items-center justify-center bg-slate-900/60 backdrop-blur-md border border-slate-700/50 text-white hover:bg-slate-800/80 active:scale-90 transition [&_svg]:size-6"
+            aria-label="Flip Camera View direction"
+            @click="handleCameraFlip"
+        />
+      </div>
+
       <div class="absolute bottom-8 left-0 right-0 flex items-center justify-between z-30 px-8 pointer-events-none">
 
         <div class="flex items-center justify-center w-12 h-12 md:hidden pointer-events-auto">
@@ -87,6 +98,12 @@ const activeUserId = (userId.value && uuidRegex.test(userId.value))
     : crypto.randomUUID()
 
 const fileModel = ref<any>(null)
+
+const handleCameraFlip = () => {
+  if (viewerRef.value?.toggleCameraFacing) {
+    viewerRef.value.toggleCameraFacing()
+  }
+}
 
 const handleCapture = async (): Promise<void> => {
   if (!viewerRef.value || isUploading.value) return
