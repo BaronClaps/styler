@@ -10,9 +10,10 @@ const { userId } = useUser()
 
 interface ClothingItem {
   id: string
-  user_id: string | null
+  user_id: string
   image_url: string
-  status: 'pending' | 'completed' | 'failed' | 'processed'
+  status: 'pending' | 'processed' | 'failed'
+  created_at?: string
   category?: string
   sub_category?: string
   primary_color_hex?: string
@@ -22,13 +23,14 @@ interface ClothingItem {
   style_tags?: string[]
   weather_tags?: string[]
   occasions?: string[]
-  created_at?: string
+  color?: string
 }
 
 const items = ref<ClothingItem[]>([])
 const isLoading = ref(true)
 const isRefreshing = ref(false)
 const errorMessage = ref<string | null>(null)
+const deletingId = ref<string | null>(null)
 
 const fetchWardrobeItems = async (showRefreshIndicator = false) => {
   if (!userId.value) {
@@ -57,9 +59,34 @@ const fetchWardrobeItems = async (showRefreshIndicator = false) => {
   }
 }
 
+const deleteItem = async (id: string) => {
+  if (!userId.value) return
+
+  deletingId.value = id
+  try {
+    // Verified targeting utilizing both Item ID and User ID context to satisfy Supabase RLS
+    const { error } = await supabase
+        .from('clothing_items')
+        .delete()
+        .eq('id', id)
+        .eq('user_id', userId.value)
+
+    if (error) throw error
+
+    // Smooth immediate refresh following successful drop
+    await fetchWardrobeItems(false)
+  } catch (err: any) {
+    console.error('Error deleting wardrobe item:', err)
+    alert(err.message || 'Failed to delete item. Verify your database permissions.')
+  } finally {
+    deletingId.value = null
+  }
+}
+
 const getStatusBadgeColor = (status: ClothingItem['status']) => {
   switch (status) {
     case 'completed':
+      return 'success'
     case 'processed':
       return 'success'
     case 'pending':
@@ -113,8 +140,8 @@ onMounted(() => {
       </div>
 
       <div v-else-if="isLoading" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-        <div v-for="n in 4" :key="n" class="rounded-xl bg-slate-900/60 border border-slate-800/60 flex flex-col overflow-hidden animate-pulse">
-          <div class="aspect-[3/4] bg-slate-800/40" />
+        <div v-for="n in 4" :key="n" class="aspect-[3/4] rounded-xl bg-slate-900/60 border border-slate-800/60 flex flex-col overflow-hidden animate-pulse">
+          <div class="flex-1 bg-slate-800/40" />
           <div class="p-3 space-y-2 bg-neutral-900/40">
             <div class="h-4 bg-slate-800 rounded w-2/3" />
             <div class="h-3 bg-slate-800 rounded w-1/3" />
@@ -153,10 +180,26 @@ onMounted(() => {
                 class="w-full h-full object-cover group-hover:scale-102 transition-transform duration-500"
                 loading="lazy"
             />
-            <div class="absolute top-2 right-2 z-10">
+            <div class="absolute top-2 left-2 z-10">
               <UBadge :color="getStatusBadgeColor(item.status)" variant="solid" size="sm" class="capitalize font-semibold tracking-wide shadow-md px-1.5 py-0.5 text-[10px]">
                 {{ item.status }}
               </UBadge>
+            </div>
+
+            <div class="absolute top-2 right-2 z-10">
+              <button
+                  type="button"
+                  class="flex items-center justify-center w-7 h-7 rounded-full shadow-lg bg-rose-600 hover:bg-rose-700 text-white border border-rose-700 transition-all focus:outline-none disabled:opacity-50"
+                  :disabled="deletingId !== null"
+                  @click.stop="deleteItem(item.id)"
+                  aria-label="Delete wardrobe record"
+              >
+                <UIcon
+                    :name="deletingId === item.id ? 'i-heroicons-arrow-path' : 'i-heroicons-trash'"
+                    class="w-4 h-4 text-white"
+                    :class="{ 'animate-spin': deletingId === item.id }"
+                />
+              </button>
             </div>
           </div>
 
