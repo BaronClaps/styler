@@ -79,6 +79,11 @@ const items = ref<NavigationMenuItem[]>([
     to: '/camera'
   },
   {
+    label: 'Outfits',
+    icon: 'i-lucide-shirt',
+    to: '/outfits'
+  },
+  {
     label: 'Settings',
     icon: "i-heroicons-cog-6-tooth",
     to: '/settings'
