@@ -92,6 +92,7 @@ serve(async (req) => {
        - Exactly one "Footwear" match (to complete the entire silhouette from head to toe).
     3. NO REPETITION: Do not duplicate items or category functions. Never assign multiple items of the exact same category sub-type (e.g., do not combine two sweaters or two pairs of sneakers in the same look).
     4. INVENTORY BOUNDARY: You may ONLY use the unique UUID string identifiers present in the "Available Wardrobe Database" list. Never fabricate or hallucinate an item UUID.
+    5. MATCH: All pieces should work cohesively to make a match and a complete outfit that aligns with the user's prompt and/or specified tag filters. The overall look should be stylish, balanced, and contextually appropriate.
 
     === PROMPT ALIGNMENT AND MATCHING CRITERIA ===
     - PRIORITY ONE: The user submitted an explicit text prompt context parameter: "${job.prompt}". You MUST interpret the stylistic tone, mood, color harmony, and aesthetic vibe of this prompt, using it as your primary steering guide.
